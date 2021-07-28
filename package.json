@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
+    "dev:server": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
+    "dev:queue": "tsnd src/queue.ts",
     "build": "rm -rf dist; tsc",
     "lint": "eslint src/**/*.ts",
     "start": "node -r 'dotenv/config' dist/server.js",
