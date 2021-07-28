@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "lib": ["es6"],
+    "types": ["mocha", "express"],
+    "rootDir": "./src",
+    "outDir": "dist",
+    "removeComments": true,
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "./__tests__/",
+    "./node_modules/",
+    "./dist/"
+  ],
+}
