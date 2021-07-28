@@ -1,11 +1,67 @@
 import { Request, Response } from 'express';
+import { UserModel } from '../entities/User';
+import { mailTransport } from '../services/mail';
 
 class UserController {
-  create = async (req: Request, response: Response) => {}
+  create = async (req: Request, res: Response) => {
+    const userData = req.body;
 
-  index = async (req: Request, response: Response) => {}
+    if (!userData.name || !userData.email) {
+      return res.status(400).json({ error: 'Fill required fields "name" and "email"' });
+    }
 
-  indexById = async (req: Request, response: Response) => {}
+    const userAlreadyExists = await UserModel.findOne({ email: userData.email });
+
+    if (userAlreadyExists) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+
+    const user = await UserModel.create(userData);
+
+    await mailTransport.sendMail({
+      from: 'BullRedis <bull-redis@test.com>',
+      to: `${user.name} <${user.email}>`,
+      subject: `Bem-vindo ${user.name}!`,
+      html: `<h2>Hello ${user.name}<h2>
+      <p>Click here to verify your email => <a href="http://localhost:3333/users/verify-email/${user.id}">Verificar</a> </p>`,
+    });
+
+    return res.status(201).json(user);
+  }
+
+  index = async (req: Request, res: Response) => {
+    const users = await UserModel.find();
+
+    return res.status(200).json(users);
+  }
+
+  indexById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const user = await UserModel.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    return res.status(200).json(user);
+  }
+
+  verifyEmail = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const user = await UserModel.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    user.verifiedEmail = true;
+
+    user.save()
+      .then(() => res.status(200).json({ message: 'Email verified' }))
+      .catch((err) => res.status(500).json({ error: err }));
+  }
 }
 
 export { UserController };
