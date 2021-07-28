@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UserModel } from '../entities/User';
-import { mailTransport } from '../services/mail';
+import { mailQueue } from '../services/mail-queue';
 
 class UserController {
   create = async (req: Request, res: Response) => {
@@ -18,13 +18,7 @@ class UserController {
 
     const user = await UserModel.create(userData);
 
-    await mailTransport.sendMail({
-      from: 'BullRedis <bull-redis@test.com>',
-      to: `${user.name} <${user.email}>`,
-      subject: `Bem-vindo ${user.name}!`,
-      html: `<h2>Hello ${user.name}<h2>
-      <p>Click here to verify your email => <a href="http://localhost:3333/users/verify-email/${user.id}">Verificar</a> </p>`,
-    });
+    await mailQueue.add({ user });
 
     return res.status(201).json(user);
   }

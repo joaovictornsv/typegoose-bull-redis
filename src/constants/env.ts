@@ -4,3 +4,5 @@ export const { MAIL_HOST } = process.env;
 export const { MAIL_PORT } = process.env;
 export const { MAIL_USER } = process.env;
 export const { MAIL_PASS } = process.env;
+export const { REDIS_HOST } = process.env;
+export const { REDIS_PORT } = process.env;
