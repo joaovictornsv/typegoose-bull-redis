@@ -8,4 +8,9 @@ const redisConfig = {
 
 const redisClient = new Redis(redisConfig);
 
+redisClient.on('error', (err) => {
+  console.log(err);
+  process.exit(1);
+});
+
 export { redisConfig, redisClient };
