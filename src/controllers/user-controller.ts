@@ -18,7 +18,7 @@ class UserController {
 
     const user = await UserModel.create(userData);
 
-    await mailQueue.add({ user });
+    await mailQueue.add({ user }, { delay: 5000 });
 
     return res.status(201).json(user);
   }
