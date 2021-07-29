@@ -1,3 +1,4 @@
+import Redis from 'ioredis';
 import { REDIS_HOST, REDIS_PORT } from '../constants/env';
 
 const redisConfig = {
@@ -5,4 +6,6 @@ const redisConfig = {
   port: Number(REDIS_PORT),
 };
 
-export { redisConfig };
+const redisClient = new Redis(redisConfig);
+
+export { redisConfig, redisClient };

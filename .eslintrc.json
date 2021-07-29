@@ -18,6 +18,8 @@
   "rules": {
     "camelcase":"off",
     "no-console":"off",
+    "no-useless-constructor": "off",
+    "no-empty-function": "off",
     "no-unused-vars": "warn",
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
     "class-methods-use-this": "off",
